@@ -24,6 +24,24 @@ app.get('/', (req, res) => {
   res.send('Servidor está rodando!');
 });
 
+// Rota para criar uma nova nota
+app.post('/api/notes', async (req, res) => {
+  const { title, content } = req.body;
+
+  try {
+    const newNote = new Note({
+      title,
+      content,
+    });
+    await newNote.save();
+    res.status(201).json(newNote);
+  } catch (error) {
+    console.error('Error creating note:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 // Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
+

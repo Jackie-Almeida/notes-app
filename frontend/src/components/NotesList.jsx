@@ -1,18 +1,30 @@
 // src/components/NotesList.jsx
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
 const NotesList = () => {
-  const notes = [
-    { id: 1, title: 'Note 1', content: 'This is the first note' },
-    { id: 2, title: 'Note 2', content: 'This is the second note' },
-  ];
+  const [notes, setNotes] = useState([]);
+
+  // Carregar as notas do backend
+  useEffect(() => {
+    const fetchNotes = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/notes');
+        setNotes(response.data);
+      } catch (error) {
+        console.error("There was an error fetching the notes!", error);
+      }
+    };
+
+    fetchNotes();
+  }, []);
 
   return (
     <div>
       <h2>Notes</h2>
       <ul>
         {notes.map(note => (
-          <li key={note.id}>
+          <li key={note._id}>
             <h3>{note.title}</h3>
             <p>{note.content}</p>
           </li>
@@ -23,4 +35,4 @@ const NotesList = () => {
 }
 
 export default NotesList;
-
+ 
